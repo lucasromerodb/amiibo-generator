@@ -28,13 +28,13 @@ function loadAmiibos() {
 
   console.log('DATOS:', url);
 
-  const xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-  xhr.onload = function() {
-    if (this.status === 200) {
-      const amiibos = JSON.parse(this.responseText);
-
+  fetch(url)
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(amiibos) {
       let structure = '<ul class="lista">';
+
       amiibos.amiibo.forEach(function(amiibo) {
         structure += `
           <li>
@@ -47,11 +47,37 @@ function loadAmiibos() {
       structure += '</ul>'
 
       results.innerHTML = structure;
-
-    } else {
-      console.log('Error al cargar datos.');
+    })
+    .catch(function(error) {
+      console.log(error);
       results.innerHTML = '';
-    }
-  }
-  xhr.send();
+    })
+
+
+  // const xhr = new XMLHttpRequest();
+  // xhr.open('GET', url, true);
+  // xhr.onload = function() {
+  //   if (this.status === 200) {
+  //     const amiibos = JSON.parse(this.responseText);
+  //
+  //     let structure = '<ul class="lista">';
+  //     amiibos.amiibo.forEach(function(amiibo) {
+  //       structure += `
+  //         <li>
+  //           <b>${amiibo.name}</b>
+  //           <p>${amiibo.gameSeries} - <i>${amiibo.type}</i></p>
+  //         </li>
+  //       `;
+  //     });
+  //
+  //     structure += '</ul>'
+  //
+  //     results.innerHTML = structure;
+  //
+  //   } else {
+  //     console.log('Error al cargar datos.');
+  //     results.innerHTML = '';
+  //   }
+  // }
+  // xhr.send();
 }
